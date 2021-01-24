@@ -1,3 +1,4 @@
+#include<windows.h>
 #include<iostream>
 using namespace std;
 
@@ -117,11 +118,20 @@ void phonebook::create(contact *new_contact)
             }
         }
     }
+    Sleep(1000);
+    cout<<".";
+    Sleep(1000);
+    cout<<"\n.";
+    Sleep(1000);
+    cout<<"\n.";
+    Sleep(1000);
+    cout<<"\ncontact added\n";
 }
 
 void phonebook::display()
 {
     contact *ptr;
+    int count=0;
     ptr = start;
     cout<<"\n----------------------------------------\n";
     while(ptr != NULL)
@@ -131,7 +141,9 @@ void phonebook::display()
         cout<<"\nEmail: "<<ptr->contact_email<<endl;
         cout<<"\n----------------------------------------\n";
         ptr = ptr->forw;
+        count++;
     }
+    cout<<"\n              "<<count<<" contacts\n\n";
 }
 main()
 {
@@ -147,7 +159,7 @@ main()
             case 1: ph.add_contact();break;
             //case 2: ph.delete_contact();break;
             case 3: ph.display();break;          
-            default: cout<<"\ninvalid option\n";break;
+            default: cout<<"\ninvalid option\n\n";break;
         }
     } while (op>=1 && op<=3);
 }
