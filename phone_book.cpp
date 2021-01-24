@@ -90,31 +90,29 @@ void phonebook::create(contact *new_contact)
             {
                 bef = start;
                 ptr = start->forw;
-                while(bef != NULL)
+                while(ptr != NULL)
                 {
-                    cout<<"111\n";
-                    if(bef->forw == NULL)
+                    if(ptr->forw == NULL && new_contact->contact_name > ptr->contact_name)
                     {
-                        bef->forw = new_contact;
-                        new_contact->prev = bef;
-                        cout<<"444\n";
+                        ptr->forw = new_contact;
+                        new_contact->prev = ptr;
+                        break;
                     }
 
                     else
                     {
                         if(new_contact->contact_name > bef->contact_name && new_contact->contact_name < ptr->contact_name)
                         {
-                            new_contact->forw = ptr->forw;
+                            new_contact->forw = ptr;
                             ptr->prev = new_contact;
                             bef->forw = new_contact;
                             new_contact->prev = bef;
-                            cout<<"222\n";
+                            break;
                         }
                     }
 
                     bef = ptr;
                     ptr = ptr->forw;
-                    cout<<"555\n";
                 }
             }
         }
