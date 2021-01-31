@@ -144,8 +144,8 @@ void phonebook::delete_contact()
     switch (op)
     {
         case 1: del_via_name();break;
-        //case 2: del_via_number();break;
-        //case 3: del_via_email();break;
+        case 2: del_via_number();break;
+        case 3: del_via_email();break;
         default: cout<<"\ninvalid choice\n";
     }
 }
@@ -171,7 +171,7 @@ void phonebook::del_via_name()
         }
     
         if(c == 0)
-            cout<<"there is no such contact with name "<<name<<endl;
+            cout<<"\nthere is no such contact with name "<<name<<endl;
         else
         {
             if(start->forw == NULL)
@@ -195,6 +195,95 @@ void phonebook::del_via_name()
     }
 }
 
+void phonebook::del_via_number()
+{
+    c = 0;
+    contact *ptr = start;
+    if(start == NULL)
+        cout<<"\ncontact list is empty\n";
+    else
+    {
+        cout<<"\nenter the number of the contact: ";
+        cin>>number;
+        while(ptr != NULL)
+        {
+            if(ptr->contact_number == number)
+            {
+                c = 1;
+                break;
+            }
+            ptr = ptr->forw;
+        }
+    
+        if(c == 0)
+            cout<<"\nthere is no such contact with number "<<number<<endl;
+        else
+        {
+            if(start->forw == NULL)
+                start = NULL;
+            else
+            {
+                if(ptr == start)
+                {
+                    start = start->forw;
+                }
+                else
+                {
+                    ptr->prev->forw = ptr->forw;
+                    if(ptr->forw != NULL)
+                        ptr->forw->prev = ptr->prev;
+                }
+            }
+            cout<<"\ncontact deleted\n";
+            delete ptr;
+        }
+    }
+}
+
+void phonebook::del_via_email()
+{
+    c = 0;
+    contact *ptr = start;
+    if(start == NULL)
+        cout<<"\ncontact list is empty\n";
+    else
+    {
+        cout<<"\nenter the email of the contact: ";
+        cin>>email;
+        while(ptr != NULL)
+        {
+            if(ptr->contact_email == email)
+            {
+                c = 1;
+                break;
+            }
+            ptr = ptr->forw;
+        }
+    
+        if(c == 0)
+            cout<<"\nthere is no such contact with email "<<email<<endl;
+        else
+        {
+            if(start->forw == NULL)
+                start = NULL;
+            else
+            {
+                if(ptr == start)
+                {
+                    start = start->forw;
+                }
+                else
+                {
+                    ptr->prev->forw = ptr->forw;
+                    if(ptr->forw != NULL)
+                        ptr->forw->prev = ptr->prev;
+                }
+            }
+            cout<<"\ncontact deleted\n";
+            delete ptr;
+        }
+    }
+}
 //function which displays the contact in the phonebook
 void phonebook::display()
 {
