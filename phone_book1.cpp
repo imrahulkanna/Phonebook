@@ -1,5 +1,6 @@
 #include<windows.h>
 #include<iostream>
+#include<string>
 using namespace std;
 
 class phonebook;
@@ -28,12 +29,14 @@ class phonebook
         start = NULL;
     }
     void add_contact();
+    void create(contact *);
+    void search();
     void delete_contact();
     void del_via_name();
     void del_via_number();
     void del_via_email();
+    void del_all_contacts();
     void display();
-    void create(contact *);
 };
 
 //function which adds new contacts to the phonebook
@@ -53,7 +56,6 @@ void phonebook::add_contact()
     new_contact->contact_email = email;
     new_contact->forw = NULL;
     new_contact->prev = NULL;
-    cout<<"\ncreating the contact\n";
     create(new_contact);
 }
 
@@ -123,21 +125,41 @@ void phonebook::create(contact *new_contact)
             }
         }
     }                                                              //to slow down the output we are writing this chuck of code
-    Sleep(1000);                                                   //Sleep function is an in-inbuilt function in (windows.h) 
-    cout<<".";                                                     //Sleep function takes time as parameter in milliseconds
     Sleep(1000);
-    cout<<"\n.";
-    Sleep(1000);
-    cout<<"\n.";
-    Sleep(1000);
+    cout<<"\n.\n";
+    Sleep(500);
+    cout<<"\n.\n";                                                  //Sleep function is an in-inbuilt function in (windows.h) 
     cout<<"\ncontact saved\n";
+}
+
+void phonebook::search()
+{
+    int count = 0;
+    string s;
+    cout<<"\nenter (full or partial) name/number/email: ";
+    cin>>s;
+    cout<<"\nSearching...\n";
+    contact *ptr = start;
+    cout<<"\n----------------------------------------\n";
+
+    while(ptr != NULL)
+    {
+        if((ptr->contact_name.find(s) < ptr->contact_name.length()) || (ptr->contact_number.find(s) < ptr->contact_number.length()) || (ptr->contact_email.find(s) < ptr->contact_email.length()))
+        {
+            cout<<"\nName: "<<ptr->contact_name<<endl;
+            cout<<"\n----------------------------------------\n";
+            count++;
+        }
+        ptr = ptr->forw;
+    }
+    cout<<"\n           "<<count<<" contacts found\n\n";
 }
 
 void phonebook::delete_contact()
 {
     int op;
     cout<<"\nHow do you wanna delete a contact?\n";
-    cout<<"\n1.via name       2.via number       3.via email\n";
+    cout<<"\n1.via name       2.via number       3.via email       4.delete all contacts\n";
     cout<<"\nenter your choice: ";
     cin>>op;
     cout<<endl;
@@ -146,6 +168,7 @@ void phonebook::delete_contact()
         case 1: del_via_name();break;
         case 2: del_via_number();break;
         case 3: del_via_email();break;
+        case 4:del_all_contacts();break;
         default: cout<<"\ninvalid choice\n";
     }
 }
@@ -189,7 +212,7 @@ void phonebook::del_via_name()
                         ptr->forw->prev = ptr->prev;
                 }
             }
-            cout<<"\ncontact deleted\n";
+            cout<<"\n"<<ptr->contact_name<<"'s contact deleted\n";
             delete ptr;
         }
     }
@@ -234,7 +257,7 @@ void phonebook::del_via_number()
                         ptr->forw->prev = ptr->prev;
                 }
             }
-            cout<<"\ncontact deleted\n";
+            cout<<"\n"<<ptr->contact_name<<"'s contact deleted\n";
             delete ptr;
         }
     }
@@ -279,11 +302,35 @@ void phonebook::del_via_email()
                         ptr->forw->prev = ptr->prev;
                 }
             }
-            cout<<"\ncontact deleted\n";
+            cout<<"\n"<<ptr->contact_name<<"'s contact deleted\n";
             delete ptr;
         }
     }
 }
+
+void phonebook::del_all_contacts()
+{
+    contact *ptr = start;
+    contact *bef = NULL;
+    if(start == NULL)
+        cout<<"\ncontact list is empty\n";
+    else
+    {
+        do
+        {
+            bef = ptr;
+            delete ptr;
+            ptr = bef->forw;
+        }while(ptr != NULL);
+        start = NULL;
+        Sleep(1000);
+        cout<<"\n. ";
+        Sleep(1000);
+        cout<<". .\n";
+        cout<<"\nAll contacts deleted\n\n";
+    }
+}
+
 //function which displays the contact in the phonebook
 void phonebook::display()
 {
@@ -302,21 +349,23 @@ void phonebook::display()
     }
     cout<<"\n              "<<count<<" contacts\n\n";
 }
+
 main()
 {
     phonebook ph;
     int op;
     do
     {
-        cout<<"\n1.Add a contact    2.Delete    3.Display\n";
+        cout<<"\n1.Add a contact    2.Search    3.Delete    4.Display\n";
         cout<<"\nenter your option: ";
         cin>>op;
         switch (op)
         {
             case 1: ph.add_contact();break;
-            case 2: ph.delete_contact();break;
-            case 3: ph.display();break;          
+            case 2: ph.search();break;
+            case 3: ph.delete_contact();break;
+            case 4: ph.display();break;          
             default: cout<<"\ninvalid option\n\n";break;
         }
-    } while (op>=1 && op<=3);
+    } while (op>=1 && op<=4);
 }
